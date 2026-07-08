@@ -5,6 +5,8 @@
 Budget Owner’s Guide
 ====================
 
+:Document Owner: TYPO3 Association Business Control Committee
+
 ..  _budget-owner-introduction:
 
 As a budget owner, you are responsible for your budget:

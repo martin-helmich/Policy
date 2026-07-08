@@ -1,0 +1,78 @@
+:navigation-title: MM-DD <DECISION TITLE>
+..  include:: /Includes.rst.txt
+..  _t3a-board-decision-YYYY-MM-DD-<DECISION SLUG>:
+
+================================
+Board Decision: <DECISION TITLE>
+================================
+
+:Start of voting: 8 June 2026
+:Voting deadline: 10 June 2026
+:Decision owner: `<DECISION OWNER>`_
+:Decision status: <✅ Accepted | ❌ Rejected>
+
+---------------------
+Attendance and voting
+---------------------
+
+====================  ==========  ======
+Board Member          Attendance  Vote
+====================  ==========  ======
+`Olivier Dobberkau`_  In meeting  <✅ Yes | ❌ No | ⚪ Abstain | ⚫ Recused>
+`Stefan Busemann`_    In meeting  <✅ Yes | ❌ No | ⚪ Abstain | ⚫ Recused>
+`Jochen Weiland`_     In meeting  <✅ Yes | ❌ No | ⚪ Abstain | ⚫ Recused>
+`Martin Helmich`_     In meeting  <✅ Yes | ❌ No | ⚪ Abstain | ⚫ Recused>
+`Jana Höffner`_       In meeting  <✅ Yes | ❌ No | ⚪ Abstain | ⚫ Recused>
+`Thomas Maroschik`_   In meeting  <✅ Yes | ❌ No | ⚪ Abstain | ⚫ Recused>
+====================  ==========  ======
+
+.. _Olivier Dobberkau: https://my.typo3.org/u/oli4
+.. _Stefan Busemann: https://my.typo3.org/u/stefan.busemann
+.. _Jochen Weiland: https://my.typo3.org/u/jweiland
+.. _Martin Helmich: https://my.typo3.org/u/mhelmich
+.. _Jana Höffner: https://my.typo3.org/u/janahh
+.. _Thomas Maroschik: https://my.typo3.org/u/tmaroschik
+
+---------------------
+Decision description
+--------------------
+
+Facts/Problem
+^^^^^^^^^^^^^
+
+...
+
+Objective
+^^^^^^^^^
+
+...
+
+Obligations to cooperate
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+...
+
+Financial and human resources impacts
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+...
+
+Resolution/Petitum
+^^^^^^^^^^^^^^^^^^
+
+...
+
+Discarded alternatives
+^^^^^^^^^^^^^^^^^^^^^^
+
+...
+
+Attachments
+^^^^^^^^^^^
+
+...
+
+Comments
+^^^^^^^^
+
+...
