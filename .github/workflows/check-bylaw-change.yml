@@ -1,0 +1,92 @@
+name: Bylaw change
+
+# Runs as pull_request_target so it has a write token for fork PRs (labels/comments).
+#
+# SECURITY: never check out or execute PR-provided code here, and never interpolate
+# PR-controlled text into a shell. Inspect the PR only through the API (as below).
+on:
+  pull_request_target:
+    branches:
+      - main
+    paths:
+      - Documentation/Association/BylawsAndProceedings.rst
+
+jobs:
+  check-protocol-link:
+    name: Assert that General Assembly protocol is linked
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check for a protocol link and update the pull request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commits = await github.paginate(github.rest.pulls.listCommits, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            const match = commits
+              .map(c => (c.commit.message.match(/https:\/\/typo3\.org\S*/) || [])[0])
+              .find(Boolean);
+            const found = Boolean(match);
+
+            const marker = '<!-- ga-protocol-check -->';
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body.includes(marker));
+
+            const intro = `This pull request modifies the TYPO3 Association bylaws. Any changes to the bylaws require a two-thirds majority vote of the General Assembly. To ensure that this pull request is valid, please include a link to the General Assembly protocol in the Git commit message.`;
+            const note = `**Note to reviewer**: If you are approving this pull request, please make sure that the changes in this PR match the changes that were approved in the General Assembly protocol. Also make sure that the non-authoritative English translation of the bylaws is updated accordingly.`;
+            const body = found
+              ? `${marker}\n${intro}\n\n✅ Found a link to the General Assembly protocol in the commit message: ${match}\n\n${note}`
+              : `${marker}\n${intro}\n\n❌ Bylaw changes require a link to the General Assembly protocol in a Git commit message.\n\n${note}`;
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+            const addLabel = found ? 'bylaw-change: ga-approved' : 'bylaw-change: ga-approval needed';
+            const removeLabel = found ? 'bylaw-change: ga-approval needed' : 'bylaw-change: ga-approved';
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: [addLabel],
+            });
+
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: removeLabel,
+              });
+            } catch (err) {
+              // A 404 just means the label wasn't set on the PR — nothing to remove.
+              if (err.status !== 404) {
+                throw err;
+              }
+            }
+
+            if (!found) {
+              core.setFailed('No link to the General Assembly protocol found in the commit messages.');
+            }

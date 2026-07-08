@@ -1,0 +1,74 @@
+# Runs as pull_request_target / pull_request_review so it has a write token and can
+# read reviews on fork PRs.
+#
+# SECURITY: never check out or execute PR-provided code here, and never interpolate
+# PR-controlled text into a shell. Inspect the PR only through the API.
+name: Check approvals
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+  pull_request_review:
+    types: [submitted, dismissed, edited]
+
+jobs:
+  check-approvals:
+    name: Assert required approvals
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      checks: write
+    steps:
+      - name: Count approvals and publish a status check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const requiredByLabel = {
+              'type: bylaw change': 2,
+              'type: formal change': 2,
+              'type: maintenance change': 1,
+            };
+            const pr = context.payload.pull_request;
+
+            // Required number of approvals is driven by the change type label.
+            const labels = await github.paginate(github.rest.issues.listLabelsOnIssue, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+            });
+            const required = Math.max(
+              0,
+              ...labels.map(l => requiredByLabel[l.name] || 0),
+            );
+
+            // Count distinct users whose latest review is an approval.
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+            const latestState = new Map();
+            for (const r of reviews) {
+              if (!r.user || r.state === 'COMMENTED') continue;
+              latestState.set(r.user.login, r.state);
+            }
+            const count = [...latestState.values()].filter(s => s === 'APPROVED').length;
+
+            const ok = count >= required;
+            await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Required approvals',
+              head_sha: pr.head.sha,
+              status: 'completed',
+              conclusion: ok ? 'success' : 'failure',
+              output: {
+                title: `${count} / ${required} approvals`,
+                summary: ok
+                  ? `${count} of ${required} required approval(s) present.`
+                  : `This pull request needs ${required} approval(s) but only has ${count}.`,
+              },
+            });
