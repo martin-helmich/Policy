@@ -1,0 +1,153 @@
+# This GitHub workflow asserts that pull requests that modify the
+# bylaws include a link to the relevant General Assembly protocol in
+# a Git commit message. Every single commit that touches the bylaws
+# file must carry such a link. This is required because any changes to
+# the bylaws require a two-thirds majority vote of the General Assembly,
+# and the protocol serves as proof of that vote.
+#
+# This workflow is governed by a TYPO3 Association Board decision,
+# documented in Documentation/Association/Board/Decisions/2026/07-09-PolicyGovernance.rst.
+# Changing it (apart from maintenance changes) requires a formal Board
+# decision, documented in the same manner.
+name: Bylaw change
+
+# Runs as pull_request_target so it has a write token for fork PRs (labels/comments).
+#
+# SECURITY: never check out or execute PR-provided code here, and never interpolate
+# PR-controlled text into a shell. Inspect the PR only through the API (as below).
+on:
+  pull_request_target:
+    branches:
+      - main
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+
+jobs:
+  check-protocol-link:
+    name: Assert that General Assembly protocol is linked
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check for a protocol link and update the pull request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const bylawsFile = 'Documentation/Association/BylawsAndProceedings.rst';
+            const protocolLink = /https:\/\/typo3\.org\S*/;
+
+            const commits = await github.paginate(github.rest.pulls.listCommits, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            const labels = await github.paginate(github.rest.issues.listLabelsOnIssue, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            // If this item was manually flagged as a maintenance change (bylaws can
+            // have typos, too), we don't require a protocol link.
+            const explicitlyDeclaredAsMaintenance = labels.some(l => l.name === 'type: maintenance change');
+
+            // Every commit that touches the bylaws file must carry a link to the
+            // General Assembly protocol in its message. We inspect each commit's
+            // files individually so a single linked commit cannot vouch for
+            // unrelated bylaw changes elsewhere in the PR.
+            const bylawCommits = [];
+            for (const c of commits) {
+              const detail = await github.rest.repos.getCommit({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: c.sha,
+              });
+              const touchesBylaws = (detail.data.files || [])
+                .some(f => f.filename === bylawsFile);
+              if (!touchesBylaws) {
+                continue;
+              }
+              bylawCommits.push({
+                sha: c.sha.substring(0, 7),
+                url: (c.commit.message.match(protocolLink) || [])[0] || null,
+              });
+            }
+
+            if (bylawCommits.length === 0) {
+              return;
+            }
+
+            const found = bylawCommits.every(c => c.url);
+
+            const marker = '<!-- ga-protocol-check -->';
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body.includes(marker));
+
+            const intro = `This pull request modifies the TYPO3 Association bylaws. Any changes to the bylaws require a two-thirds majority vote of the General Assembly. To ensure that this pull request is valid, every commit that touches the bylaws must include a link to the General Assembly protocol in its Git commit message.`;
+            const note = `**Note to reviewer**: If you are approving this pull request, please make sure that the changes in this PR match the changes that were approved in the General Assembly protocol. Also make sure that the non-authoritative English translation of the bylaws is updated accordingly.\n\nIn addition to the General Assembly protocol, this pull request must be approved by at least two representatives of the document owner (in this case, the TYPO3 Association Board in representation for the General Assembly).`;
+            const commitList = bylawCommits
+              .map(c => c.url
+                ? `- ✅ ${c.sha} → ${c.url}`
+                : `- ❌ ${c.sha} → no General Assembly protocol link`)
+              .join('\n');
+            const summary = found
+              ? `Every commit that modifies the bylaws links to the General Assembly protocol.`
+              : `Some commits that modify the bylaws are missing a link to the General Assembly protocol.`;
+            let body = `${marker}\n${intro}\n\n${summary}\n\n${commitList}\n\n${note}`;
+
+            if (explicitlyDeclaredAsMaintenance) {
+              body = `${marker}\nThis pull request modifies the TYPO3 Association bylaws, but was explicitly declared as a maintenance change.\n\n**Note to reviewer**: If you are approving this pull request, please make sure that this change *DOES NOT* affect the substantive content of the bylaws.`;
+            }
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+            if (explicitlyDeclaredAsMaintenance) {
+              return;
+            }
+
+            const addLabel = found ? 'bylaw-change: ga-approved' : 'bylaw-change: ga-approval needed';
+            const removeLabel = found ? 'bylaw-change: ga-approval needed' : 'bylaw-change: ga-approved';
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: [addLabel],
+            });
+
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: removeLabel,
+              });
+            } catch (err) {
+              // A 404 just means the label wasn't set on the PR — nothing to remove.
+              if (err.status !== 404) {
+                throw err;
+              }
+            }
+
+            if (!found) {
+              const missing = bylawCommits.filter(c => !c.url).map(c => c.sha).join(', ');
+              core.setFailed(`Commits modifying the bylaws without a General Assembly protocol link: ${missing}`);
+            }

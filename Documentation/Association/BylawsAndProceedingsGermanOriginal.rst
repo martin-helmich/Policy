@@ -6,7 +6,8 @@
 Statuten der TYPO3 Association
 ==============================
 
-*Gültig seit Juli 2025*
+:Dokumenten-Inhaber: TYPO3 Association Generalversammlung
+:Gültig seit: Juli 2025
 
 ..  _bylaws-de-i:
 
