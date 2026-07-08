@@ -6,7 +6,10 @@
 By-Laws & Proceedings — Statutes of the TYPO3 Association
 =========================================================
 
-*Our new by-laws are accepted by the General Assembly 2025 and are in place since July 2025*
+:Document Owner: TYPO3 Association General Assembly
+:Valid since: July 2025
+
+.. Attention:: This is a non-authoritative English translation of the :ref:`original German statutes <bylaws-de>`. The original German version is the legally binding version. In case of any discrepancies, the German version shall prevail.
 
 ..  _bylaws-i:
 

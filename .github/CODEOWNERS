@@ -1,0 +1,21 @@
+# This CODEOWNERS file is governed by a TYPO3 Association Board
+# decision, documented in Documentation/Association/Board/Decisions/2026/07-09-PolicyGovernance.rst.
+# Changing it (apart from maintenance changes) requires a formal Board
+# decision, documented in the same manner.
+
+# Documents in the Documentation/Association/ directory are owned by
+# the TYPO3 Association Board. Maintenance changes to these require
+# approval by a Board member, and content changes require a formal
+# Board decision.
+Documentation/Association/ @TYPO3-Documentation/board
+Documentation/Community/ @TYPO3-Documentation/board
+Documentation/Product/ @TYPO3-Documentation/board
+Documentation/Project/ @TYPO3-Documentation/board
+
+# TODO: There is no "BCC" group in the TYPO3-Documentation
+# organization, yet
+# Documentation/Association/BudgetOwnersGuide.rst @TYPO3-Documentation/bcc
+
+# Changes to the approval workflows require a Board decision, as well
+.github/CODEOWNERS @TYPO3-Documentation/board
+.github/workflows/check-.* @TYPO3-Documentation/board
