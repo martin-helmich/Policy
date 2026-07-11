@@ -13,6 +13,8 @@ By-Laws & Proceedings — Statutes of the TYPO3 Association
 
 ..  _bylaws-i:
 
+Test Change
+
 I. Name, legal form, registered office
 ======================================
 
