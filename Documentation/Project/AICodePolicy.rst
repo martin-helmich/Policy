@@ -25,50 +25,14 @@ This policy applies to all contributions to extensions published in the TYPO3 Ex
 
 The policy is deliberately pragmatic. *It neither prohibits nor stigmatizes AI-assisted development*. Instead, it establishes a framework of transparency, accountability, and quality assurance that allows the TYPO3 community to integrate AI tools responsibly while protecting the legal and technical integrity of the ecosystem.
 
-2. Landscape Analysis: How Other Projects Handle AI Code
-========================================================
+2. Motivation
+=============
 
-Before defining a TYPO3-specific approach, it is instructive to examine how other major open source projects have addressed this challenge. The spectrum ranges from outright prohibition to open acceptance, with most mature projects settling somewhere in between.
+AI-assisted development tools are now a routine part of how software is written, and TYPO3 extension development is no exception. Contributors increasingly rely on AI coding assistants, large language models, and similar generative tools to accelerate their work, explore unfamiliar APIs, and draft boilerplate code.
 
-+---------------------+---------------------------+-----------------------------------------------+---------------------------------+
-| Project             | Stance                    | Key Provisions                                | Approach                        |
-+---------------------+---------------------------+-----------------------------------------------+---------------------------------+
-| Linux Kernel        | Permitted with disclosure | Co-developed-by tag with model version;       | Pragmatic, transparency-focused |
-|                     |                           | `Signed-off-by` remains human-only; unified   |                                 |
-|                     |                           |  tool configurations                          |                                 |
-+---------------------+---------------------------+-----------------------------------------------+---------------------------------+
-| `QEMU`_             | Prohibited                | Full ban based on DCO interpretation          | Strict, legally conservative    |
-|                     |                           | requiring human authorship; legal risk        |                                 |
-|                     |                           | considered too high                           |                                 |
-+---------------------+---------------------------+-----------------------------------------------+---------------------------------+
-| `Gentoo Linux`_     | Prohibited                | Unanimous council vote banning all            | Strict, values-driven           |
-|                     |                           | AI/ML-generated contributions on copyright,   |                                 |
-|                     |                           | quality, and ethical grounds                  |                                 |
-+---------------------+---------------------------+-----------------------------------------------+---------------------------------+
-| `NetBSD`_           | Restricted                | LLM-generated code classified as "tainted";   | Cautions, approval-gated        |
-|                     |                           | requires explicit core developer approval     |                                 |
-|                     |                           | before submission                             |                                 |
-+---------------------+---------------------------+-----------------------------------------------+---------------------------------+
-| FreeBSD             | Under development         | Policy in progress; AI permitted for          | Cautious, differentiated by     |
-|                     |                           | docs/translations; code generation paused due | use case                        |
-|                     |                           | to license concerns                           |                                 |
-+---------------------+---------------------------+-----------------------------------------------+---------------------------------+
-| `Linux Foundation`_ | Permitted                 | AI-generated code welcome; contributors must  | Open, responsibility-based      |
-|                     |                           | verify tool terms align with project license  |                                 |
-|                     |                           | and IP policies                               |                                 |
-+---------------------+---------------------------+-----------------------------------------------+---------------------------------+
+This shift creates both opportunity and risk for an open source ecosystem built on trust, code quality, and legal clarity. Left unaddressed, it leaves contributors and reviewers without answers to basic questions: whether and how AI involvement should be disclosed, whether AI-generated code carries different quality or security risks than human-written code, and who bears responsibility when an AI-assisted contribution introduces a defect or a legal complication.
 
-.. _QEMU: https://www.qemu.org/docs/master/devel/code-provenance.html>
-.. _Gentoo Linux: https://wiki.gentoo.org/wiki/Project:Council/AI_policy
-.. _NetBSD: https://www.netbsd.org/developers/commit-guidelines.html
-.. _Linux Foundation: https://www.linuxfoundation.org/legal/generative-ai
-
-2.1 Key Takeaways for TYPO3
----------------------------
-
-Several patterns emerge from this analysis that inform the recommended TYPO3 approach. First, the projects closest to TYPO3 in character, meaning those that balance enterprise reliability with developer productivity, tend to favor transparency-based models over outright bans. The Linux kernel's Co-developed-by approach has gained significant traction and offers a well-tested template. Second, the legal landscape around AI-generated code and copyright remains unsettled internationally, which means any policy must be adaptable. Third, the Developer Certificate of Origin (DCO), while foundational, was not designed for an era of AI-assisted development and may require supplementary guidance rather than fundamental revision.
-
-TYPO3 occupies a particular position in this landscape: it is enterprise CMS infrastructure used in mission-critical applications, but it is also a web-oriented ecosystem where development velocity matters. This suggests a moderate, transparency-focused policy that is neither as restrictive as QEMU's ban nor as laissez-faire as the general Linux Foundation guidance.
+This policy exists to answer those questions with a stable, principle-based framework, so that contributors, maintainers, and reviewers can make consistent decisions as AI tools continue to evolve. A survey of how other open source projects have approached this same challenge is provided in `Appendix A`_ for reference.
 
 3. Core Principles
 ==================
@@ -259,3 +223,48 @@ This policy was informed by analysis of AI code policies across major open sourc
 Additional research considered a survival analysis study of over 200,000 code units across 201 open source projects, which found that AI-authored code was modified less frequently than human code (Hazard Ratio 0.842), and a separate analysis of 470 pull requests that found AI-generated code contained 1.7 times more defects than human-written code. These findings reinforce the importance of thorough human review regardless of the policy’s permissive approach to AI tool usage.
 
 The TYPO3 Association will continue to monitor developments in this space, including the proposed SPDX specification for identifying AI-generated code, potential updates to the Developer Certificate of Origin, and evolving case law regarding the copyright status of AI-generated outputs.
+
+Appendix D: Landscape Analysis: How Other Projects Handle AI Code
+=================================================================
+
+Before defining a TYPO3-specific approach, it is instructive to examine how other major open source projects have addressed this challenge. The spectrum ranges from outright prohibition to open acceptance, with most mature projects settling somewhere in between.
+
++---------------------+---------------------------+-----------------------------------------------+---------------------------------+
+| Project             | Stance                    | Key Provisions                                | Approach                        |
++---------------------+---------------------------+-----------------------------------------------+---------------------------------+
+| Linux Kernel        | Permitted with disclosure | Co-developed-by tag with model version;       | Pragmatic, transparency-focused |
+|                     |                           | `Signed-off-by` remains human-only; unified   |                                 |
+|                     |                           |  tool configurations                          |                                 |
++---------------------+---------------------------+-----------------------------------------------+---------------------------------+
+| `QEMU`_             | Prohibited                | Full ban based on DCO interpretation          | Strict, legally conservative    |
+|                     |                           | requiring human authorship; legal risk        |                                 |
+|                     |                           | considered too high                           |                                 |
++---------------------+---------------------------+-----------------------------------------------+---------------------------------+
+| `Gentoo Linux`_     | Prohibited                | Unanimous council vote banning all            | Strict, values-driven           |
+|                     |                           | AI/ML-generated contributions on copyright,   |                                 |
+|                     |                           | quality, and ethical grounds                  |                                 |
++---------------------+---------------------------+-----------------------------------------------+---------------------------------+
+| `NetBSD`_           | Restricted                | LLM-generated code classified as "tainted";   | Cautions, approval-gated        |
+|                     |                           | requires explicit core developer approval     |                                 |
+|                     |                           | before submission                             |                                 |
++---------------------+---------------------------+-----------------------------------------------+---------------------------------+
+| FreeBSD             | Under development         | Policy in progress; AI permitted for          | Cautious, differentiated by     |
+|                     |                           | docs/translations; code generation paused due | use case                        |
+|                     |                           | to license concerns                           |                                 |
++---------------------+---------------------------+-----------------------------------------------+---------------------------------+
+| `Linux Foundation`_ | Permitted                 | AI-generated code welcome; contributors must  | Open, responsibility-based      |
+|                     |                           | verify tool terms align with project license  |                                 |
+|                     |                           | and IP policies                               |                                 |
++---------------------+---------------------------+-----------------------------------------------+---------------------------------+
+
+.. _QEMU: https://www.qemu.org/docs/master/devel/code-provenance.html>
+.. _Gentoo Linux: https://wiki.gentoo.org/wiki/Project:Council/AI_policy
+.. _NetBSD: https://www.netbsd.org/developers/commit-guidelines.html
+.. _Linux Foundation: https://www.linuxfoundation.org/legal/generative-ai
+
+D.1 Key Takeaways for TYPO3
+---------------------------
+
+Several patterns emerge from this analysis that inform the recommended TYPO3 approach. First, the projects closest to TYPO3 in character, meaning those that balance enterprise reliability with developer productivity, tend to favor transparency-based models over outright bans. The Linux kernel's Co-developed-by approach has gained significant traction and offers a well-tested template. Second, the legal landscape around AI-generated code and copyright remains unsettled internationally, which means any policy must be adaptable. Third, the Developer Certificate of Origin (DCO), while foundational, was not designed for an era of AI-assisted development and may require supplementary guidance rather than fundamental revision.
+
+TYPO3 occupies a particular position in this landscape: it is enterprise CMS infrastructure used in mission-critical applications, but it is also a web-oriented ecosystem where development velocity matters. This suggests a moderate, transparency-focused policy that is neither as restrictive as QEMU's ban nor as laissez-faire as the general Linux Foundation guidance.
