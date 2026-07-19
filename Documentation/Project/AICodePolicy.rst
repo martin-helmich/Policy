@@ -42,7 +42,7 @@ This policy exists to answer those questions with a stable, principle-based fram
 
 Every contributor who submits code to a TYPO3 extension bears full responsibility for the quality, security, functionality, and license compliance of their contribution, regardless of how the code was produced. AI is a tool, not an author. The contributor is accountable for understanding, reviewing, and standing behind every line they submit, just as they would be for code adapted from Stack Overflow, documentation examples, or any other source.
 
-This principle is non-negotiable and forms the foundation of the entire policy. It aligns with the existing TYPO3 Contributor License Agreement and ensures that the established chain of accountability remains intact.
+This principle is non-negotiable and forms the foundation of the entire policy. It is consistent with standard TYPO3 contribution practice, under which contributors publish their code under the extension's license and remain personally accountable for it; TYPO3 does not require a separate Contributor License Agreement, and this policy does not introduce one. It ensures that the established chain of accountability remains intact.
 
 3.2 Transparency Through Disclosure
 -----------------------------------
