@@ -32,7 +32,7 @@ AI-assisted development tools are now a routine part of how software is written,
 
 This shift creates both opportunity and risk for an open source ecosystem built on trust, code quality, and legal clarity. Left unaddressed, it leaves contributors and reviewers without answers to basic questions: whether and how AI involvement should be disclosed, whether AI-generated code carries different quality or security risks than human-written code, and who bears responsibility when an AI-assisted contribution introduces a defect or a legal complication.
 
-This policy exists to answer those questions with a stable, principle-based framework, so that contributors, maintainers, and reviewers can make consistent decisions as AI tools continue to evolve. A survey of how other open source projects have approached this same challenge is provided in `Appendix A`_ for reference.
+This policy exists to answer those questions with a stable, principle-based framework, so that contributors, maintainers, and reviewers can make consistent decisions as AI tools continue to evolve. A survey of how other open source projects have approached this same challenge is provided in `Appendix C`_ for reference.
 
 3. Core Principles
 ==================
@@ -215,26 +215,19 @@ The following examples illustrate the expected disclosure format:
     AI-assisted: GitHub Copilot
     Signed-off-by: Developer Name <dev@example.com>
 
-Appendix C: Research Notes
-==========================
+.. _Appendix C:
 
-This policy was informed by analysis of AI code policies across major open source projects as of February 2026. Key sources include the Linux kernel’s tool-generated content guidelines (v3, November 2025), QEMU’s formal AI code ban and DCO interpretation, Gentoo’s unanimous council vote prohibiting AI/ML contributions, NetBSD’s tainted code classification, FreeBSD’s policy development process, and the Linux Foundation’s generative AI guidance.
+Appendix C: Landscape Analysis and Research Notes
+=================================================
 
-Additional research considered a survival analysis study of over 200,000 code units across 201 open source projects, which found that AI-authored code was modified less frequently than human code (Hazard Ratio 0.842), and a separate analysis of 470 pull requests that found AI-generated code contained 1.7 times more defects than human-written code. These findings reinforce the importance of thorough human review regardless of the policy’s permissive approach to AI tool usage.
-
-The TYPO3 Association will continue to monitor developments in this space, including the proposed SPDX specification for identifying AI-generated code, potential updates to the Developer Certificate of Origin, and evolving case law regarding the copyright status of AI-generated outputs.
-
-Appendix D: Landscape Analysis: How Other Projects Handle AI Code
-=================================================================
-
-Before defining a TYPO3-specific approach, it is instructive to examine how other major open source projects have addressed this challenge. The spectrum ranges from outright prohibition to open acceptance, with most mature projects settling somewhere in between.
+Before defining a TYPO3-specific approach, it is instructive to examine how other major open source projects have addressed this challenge. The spectrum ranges from outright prohibition to open acceptance, with most mature projects settling somewhere in between. This analysis reflects the state of AI code policies across major open source projects as of February 2026.
 
 +---------------------+---------------------------+-----------------------------------------------+---------------------------------+
 | Project             | Stance                    | Key Provisions                                | Approach                        |
 +---------------------+---------------------------+-----------------------------------------------+---------------------------------+
-| Linux Kernel        | Permitted with disclosure | Co-developed-by tag with model version;       | Pragmatic, transparency-focused |
-|                     |                           | `Signed-off-by` remains human-only; unified   |                                 |
-|                     |                           |  tool configurations                          |                                 |
+| `Linux Kernel`_     | Permitted with disclosure | Assisted-by tag naming the AI agent and       | Pragmatic, transparency-focused |
+|                     |                           | exact model version; Signed-off-by /          |                                 |
+|                     |                           | DCO certification remains human-only          |                                 |
 +---------------------+---------------------------+-----------------------------------------------+---------------------------------+
 | `QEMU`_             | Prohibited                | Full ban based on DCO interpretation          | Strict, legally conservative    |
 |                     |                           | requiring human authorship; legal risk        |                                 |
@@ -248,7 +241,7 @@ Before defining a TYPO3-specific approach, it is instructive to examine how othe
 |                     |                           | requires explicit core developer approval     |                                 |
 |                     |                           | before submission                             |                                 |
 +---------------------+---------------------------+-----------------------------------------------+---------------------------------+
-| FreeBSD             | Under development         | Policy in progress; AI permitted for          | Cautious, differentiated by     |
+| `FreeBSD`_          | Under development         | Policy in progress; AI permitted for          | Cautious, differentiated by     |
 |                     |                           | docs/translations; code generation paused due | use case                        |
 |                     |                           | to license concerns                           |                                 |
 +---------------------+---------------------------+-----------------------------------------------+---------------------------------+
@@ -257,14 +250,26 @@ Before defining a TYPO3-specific approach, it is instructive to examine how othe
 |                     |                           | and IP policies                               |                                 |
 +---------------------+---------------------------+-----------------------------------------------+---------------------------------+
 
-.. _QEMU: https://www.qemu.org/docs/master/devel/code-provenance.html>
+.. _Linux Kernel: https://docs.kernel.org/process/coding-assistants.html
+.. _QEMU: https://www.qemu.org/docs/master/devel/code-provenance.html
 .. _Gentoo Linux: https://wiki.gentoo.org/wiki/Project:Council/AI_policy
 .. _NetBSD: https://www.netbsd.org/developers/commit-guidelines.html
+.. _FreeBSD: https://www.theregister.com/2025/09/03/freebsd_project_update_no_ai/
 .. _Linux Foundation: https://www.linuxfoundation.org/legal/generative-ai
 
-D.1 Key Takeaways for TYPO3
+C.1 Key Takeaways for TYPO3
 ---------------------------
 
-Several patterns emerge from this analysis that inform the recommended TYPO3 approach. First, the projects closest to TYPO3 in character, meaning those that balance enterprise reliability with developer productivity, tend to favor transparency-based models over outright bans. The Linux kernel's Co-developed-by approach has gained significant traction and offers a well-tested template. Second, the legal landscape around AI-generated code and copyright remains unsettled internationally, which means any policy must be adaptable. Third, the Developer Certificate of Origin (DCO), while foundational, was not designed for an era of AI-assisted development and may require supplementary guidance rather than fundamental revision.
+Several patterns emerge from this analysis that inform the recommended TYPO3 approach. First, the projects closest to TYPO3 in character, meaning those that balance enterprise reliability with developer productivity, tend to favor transparency-based models over outright bans. The Linux kernel's Assisted-by disclosure approach, which keeps DCO sign-off human-only while requiring AI tools to be named, offers a well-tested template. Second, the legal landscape around AI-generated code and copyright remains unsettled internationally, which means any policy must be adaptable. Third, the Developer Certificate of Origin (DCO), while foundational, was not designed for an era of AI-assisted development and may require supplementary guidance rather than fundamental revision.
 
 TYPO3 occupies a particular position in this landscape: it is enterprise CMS infrastructure used in mission-critical applications, but it is also a web-oriented ecosystem where development velocity matters. This suggests a moderate, transparency-focused policy that is neither as restrictive as QEMU's ban nor as laissez-faire as the general Linux Foundation guidance.
+
+C.2 Empirical Research on AI Code Quality
+-----------------------------------------
+
+Beyond stated policy positions, the design of this policy was informed by empirical research into the quality and longevity of AI-generated code. A `survival analysis study <https://arxiv.org/abs/2601.16809>`_ of over 200,000 code units across 201 open source projects found that AI-authored code was modified less frequently than human code (Hazard Ratio 0.842), while a separate `analysis of 470 pull requests <https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report>`_ found that AI-generated code contained roughly 1.7 times more issues than human-written code. These findings reinforce the importance of thorough human review regardless of the policy's permissive approach to AI tool usage.
+
+C.3 Ongoing Developments
+------------------------
+
+The TYPO3 Association will continue to monitor developments in this space, including emerging machine-readable conventions for disclosing AI involvement in source code, potential updates to the `Developer Certificate of Origin <https://developercertificate.org/>`_, and evolving case law regarding the copyright status of AI-generated outputs, such as the U.S. Copyright Office's `report on the copyrightability of AI-generated material <https://www.copyright.gov/ai/Copyright-and-Artificial-Intelligence-Part-2-Copyrightability-Report.pdf>`_.
