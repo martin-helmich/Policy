@@ -70,7 +70,18 @@ Extension reviewers should pay special attention to security patterns in contrib
 
 By submitting a contribution, the contributor affirms that the code may be published under the extension's license (typically GPL-2.0-or-later) and that no third-party rights are infringed. This affirmation applies equally to AI-assisted and human-authored code.
 
+Our `current stance on the license compatibility of AI-generated code <https://news.typo3.com/article/typo3-association-board-meeting-protocol-8-july-2026/board-statement-on-gpl-and-ai-code>`__ is that compatibility with the GPL depends on the *provenance* of a contribution, not on the tool used to produce it. AI-generated code is not inherently incompatible with GPL-2.0-or-later. What matters is whether the contribution can lawfully be published under the extension's license without reproducing third-party material under incompatible terms. Responsibility for ensuring this rests with the contributor who submits the code.
+
 Contributors should be aware that the copyright status of AI-generated code remains legally unsettled in many jurisdictions. By submitting AI-assisted code, the contributor accepts responsibility for any intellectual property claims that may arise and warrants, to the best of their knowledge, that the contribution does not reproduce copyrighted material from other sources.
+
+3.6 Provenance Certification via DCO Sign-off
+---------------------------------------------
+
+To make the affirmation in Section 3.5 explicit and auditable, contributions  should carry a Developer Certificate of Origin (DCO) sign-off. Following the TYPO3 Association Board's July 2026 statement, this is the recommended mechanism for certifying provenance: a lightweight, transparent alternative to a full Contributor License Agreement, which TYPO3 deliberately does not require.
+
+The DCO sign-off is a deliberate ``Signed-off-by:`` trailer line in the commit message, distinct from Git's author field. By adding it, the contributor certifies the terms of the `Developer Certificate of Origin <https://developercertificate.org/>`__: that they have the right to submit the contribution under the extension's open source license. This representation applies with equal force whether or not AI tools assisted in producing the code, and it does not shift responsibility onto those tools. Because it is recorded in the commit history, the sign-off makes the contributor's provenance representation explicit and auditable, which is particularly valuable for detecting the unintentional inclusion of third-party material.
+
+The DCO sign-off is separate from, and complementary to, the ``AI-assisted:`` disclosure tag described in Section 3.2. The sign-off certifies provenance and remains a human act; the disclosure tag names any AI tools involved. Both may appear in the same commit.
 
 4. Practical Implementation
 ===========================
@@ -86,6 +97,7 @@ When using AI tools to develop TYPO3 extension code, contributors should follow 
 4. Add the AI-assisted tag to your commit message or pull request when the tool has generated structural code. You do not need to tag commits where AI was used only for autocompletion, formatting, or understanding existing code.
 5. Never submit AI output without testing it in a running TYPO3 environment. Code that compiles or passes static analysis may still fail at runtime due to incorrect assumptions about the TYPO3 framework.
 6. Pay special attention to edge cases, error handling, and TYPO3-specific conventions such as TCA configuration, Extbase patterns, and Fluid template integration. These are areas where AI tools most commonly produce subtly incorrect output.
+7. Sign off your commits with a ``Signed-off-by:`` trailer to certify the Developer Certificate of Origin (see Section 3.6). Most Git workflows add this automatically with ``git commit -s``. The sign-off certifies that you have the right to submit the code under the extension's license, and remains your representation regardless of whether AI tools were involved.
 
 4.2 For Extension Reviewers and Maintainers
 -------------------------------------------
@@ -161,7 +173,7 @@ The following mechanisms support ongoing governance:
 This policy supplements, but does not replace, the following existing TYPO3 governance documents:
 
 - `TYPO3 Coding Guidelines <https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/CodingGuidelines/Index.html>`__`: All quality and style requirements remain fully in effect.
-- TYPO3 Contributor License Agreement (CLA): The CLA’s provisions regarding intellectual property rights and license grants apply to all contributions regardless of how they were produced.
+- `Developer Certificate of Origin (DCO) <https://developercertificate.org/>`__: This policy introduces a DCO sign-off (Section 3.6) as the recommended way to certify the provenance and license grant for contributions, regardless of how they were produced. It is proposed as a lightweight alternative to a separate Contributor License Agreement, which TYPO3 does not require.
 - TYPO3 Extension Review Guidelines: The existing review process and criteria remain the primary quality gate.
 - TYPO3 Security Policy: All security reporting and handling procedures remain unchanged.
 Where a project-level “CONTRIBUTING.md” contains AI-specific provisions that are stricter than this policy, the project-level provisions take precedence.
@@ -182,8 +194,11 @@ Extension maintainers may adapt the following text for inclusion in their projec
     AI-Assisted Code. Please note:
 
     - You are fully responsible for all code you submit.
+    - Sign off your commits (`git commit -s`) to certify the
+      Developer Certificate of Origin. This applies whether or
+      not AI tools were involved.
     - Please tag AI-assisted commits with:
-    AI-assisted: [tool name]
+      `AI-assisted: [tool name]`
     - Verify all code against current TYPO3 APIs.
     - Run tests before submitting.
     - Review security-sensitive code with extra care.
